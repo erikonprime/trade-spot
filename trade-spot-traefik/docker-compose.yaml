@@ -1,0 +1,34 @@
+version: '3.5'
+services:
+
+    reverse-proxy:
+        # The official v2 Traefik docker image
+        image: traefik:v2.10
+        # Enables the web UI and tells Traefik to listen to docker
+        #  command: --api.insecure=true --providers.docker
+        command:
+            - "--api.dashboard=true"
+            - "--api.insecure=true"
+            - "--providers.docker=true"
+            - "--log.level=DEBUG"
+#        expose:
+#            - 9200
+        ports:
+            # Web
+            - '80:80'
+            - '8080:8080'
+            - '443:443'
+#            - '9200:9200'
+        volumes:
+            # So that Traefik can listen to the Docker events
+            - /var/run/docker.sock:/var/run/docker.sock
+#        labels:
+#            - "traefik.enable=true"
+#            - "traefik.http.routers.reverse-proxy.rule=Host(`traefik.local`)"
+#            - "traefik.docker.network=ts-external-network"
+#            - "traefik.http.routers.reverse-proxy.tls=true"
+
+networks:
+    default:
+        name: ts-external-network
+        external: true
