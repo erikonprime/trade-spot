@@ -36,6 +36,18 @@ services:
             - "traefik.http.routers.ts-bo-nginx.rule=Host(`backoffice.local`)"
             - "traefik.http.routers.ts-bo-nginx.tls=false"
             - "traefik.docker.network=proxy"
+
+    mariadb:
+        image: mariadb:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: qwerty123
+            MYSQL_DATABASE: trade_spot_db
+            MYSQL_USER: user
+            MYSQL_PASSWORD: qwerty123
+        ports:
+            - "3306:3306"
+        restart: on-failure
+
 networks:
     default:
         name: ts-external-network
