@@ -48,6 +48,20 @@ services:
             - "3306:3306"
         restart: on-failure
 
+    elasticsearch-ts:
+        hostname: elasticsearch-ts
+        # Linux
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0-amd64
+        container_name: elasticsearch-ts
+        ports:
+            - '9200:9200'
+            - '9300:9300'
+        networks:
+            - default
+        environment:
+            - discovery.type=single-node
+            - xpack.security.enabled=false
+
 networks:
     default:
         name: ts-external-network
