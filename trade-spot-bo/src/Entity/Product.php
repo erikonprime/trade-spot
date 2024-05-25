@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Component\Doctrine\Types\EnumProductOrderStatus;
+use App\Component\Doctrine\Types\EnumProductStatus;
 use App\Repository\ProductRepository;
 use App\Traits\Timestamp;
 use Doctrine\DBAL\Types\Types;
@@ -16,31 +18,34 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
+    private string $description;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $price = null;
+    private string $price;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Category $category = null;
+    private Category $category;
 
     #[ORM\ManyToOne(inversedBy: 'product')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Account $account = null;
+    private Account $account;
 
-    public function getId(): ?int
+    #[ORM\Column(type: "string", enumType: EnumProductStatus::class)]
+    private EnumProductStatus $status = EnumProductStatus::AVAILABLE;
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -52,7 +57,7 @@ class Product
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -64,7 +69,7 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): string
     {
         return $this->price;
     }
@@ -76,12 +81,12 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ?Category
+    public function getCategory(): Category
     {
         return $this->category;
     }
 
-    public function setCategory(?Category $category): static
+    public function setCategory(Category $category): static
     {
         $this->category = $category;
 
@@ -93,10 +98,23 @@ class Product
         return $this->account;
     }
 
-    public function setAccount(?Account $account): static
+    public function setAccount(Account $account): static
     {
         $this->account = $account;
 
         return $this;
     }
+
+    public function getStatus(): EnumProductStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(EnumProductStatus $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
 }

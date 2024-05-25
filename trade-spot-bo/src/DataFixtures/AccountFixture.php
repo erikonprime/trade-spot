@@ -15,14 +15,20 @@ class AccountFixture  extends Fixture implements DependentFixtureInterface
         $accounts = [
             [
                 'user' => $this->getReference('user_0'),
+                'firstname' => 'Eriks',
+                'lastName' =>'Flo',
                 'address' => $this->getReference('address_0'),
             ],
             [
                 'user' => $this->getReference('user_1'),
+                'firstname' => 'Jon',
+                'lastName' =>'Doe',
                 'address' => $this->getReference('address_1'),
             ],
             [
                 'user' => $this->getReference('user_2'),
+                'firstname' => 'Markus',
+                'lastName' =>'Riva',
                 'address' => $this->getReference('address_2'),
             ],
         ];
@@ -31,6 +37,8 @@ class AccountFixture  extends Fixture implements DependentFixtureInterface
             $newAccount = new Account();
             $newAccount
                 ->setUser($account['user'])
+                ->setFirstName($account['firstname'])
+                ->setLastName($account['lastName'])
                 ->setAddress($account['address']);
 
 

@@ -39,7 +39,7 @@ class AddressFixture  extends Fixture
                 ->setPhone((string)random_int(10000000,20000000))
                 ->setCountry($data['country'])
                 ->setStreet($data['street'])
-                ->setZipCode($data['city']);
+                ->setZipCode($data['zipCode']);
 
 
             $manager->persist($newAddress);

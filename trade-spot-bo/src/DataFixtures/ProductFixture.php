@@ -2,6 +2,8 @@
 
 namespace App\DataFixtures;
 
+use App\Component\Doctrine\Types\EnumProductOrderStatus;
+use App\Component\Doctrine\Types\EnumProductStatus;
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

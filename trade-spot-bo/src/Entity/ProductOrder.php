@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Component\Doctrine\Types\EnumProductOrderStatus;
+use App\Component\Doctrine\Types\EnumProductStatus;
 use App\Repository\ProductOrderRepository;
 use App\Traits\Timestamp;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,6 +30,9 @@ class ProductOrder
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private Product $product;
+
+    #[ORM\Column(type: "string", enumType: EnumProductOrderStatus::class)]
+    private EnumProductOrderStatus $status = EnumProductOrderStatus::ORDER_STATUS_NEW;
 
     public function getId(): int
     {
@@ -66,6 +71,18 @@ class ProductOrder
     public function setProduct(Product $product): static
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getStatus(): EnumProductOrderStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(EnumProductOrderStatus $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

@@ -36,6 +36,12 @@ class Account
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address = null;
 
+    #[ORM\Column(length: 100)]
+    private string $firstName;
+
+    #[ORM\Column(length: 100)]
+    private string $lastName;
+
     public function __construct()
     {
         $this->product = new ArrayCollection();
@@ -158,6 +164,30 @@ class Account
     public function setAddress(Address $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }
