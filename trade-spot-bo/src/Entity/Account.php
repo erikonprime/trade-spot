@@ -26,15 +26,9 @@ class Account
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'account', orphanRemoval: true)]
     private Collection $product;
 
-    #[ORM\OneToMany(targetEntity: ProductOrder::class, mappedBy: 'customer', orphanRemoval: true)]
-    private Collection $customerOrders;
-
-    #[ORM\OneToMany(targetEntity: ProductOrder::class, mappedBy: 'seller', orphanRemoval: true)]
-    private Collection $sellerOrders;
-
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Address $address = null;
+    private Address $address;
 
     #[ORM\Column(length: 100)]
     private string $firstName;
@@ -42,11 +36,13 @@ class Account
     #[ORM\Column(length: 100)]
     private string $lastName;
 
+    #[ORM\OneToMany(targetEntity: ProductOrder::class, mappedBy: 'customer', orphanRemoval: true)]
+    private Collection $productOrders;
+
     public function __construct()
     {
         $this->product = new ArrayCollection();
-        $this->customerOrders = new ArrayCollection();
-        $this->sellerOrders = new ArrayCollection();
+        $this->productOrders = new ArrayCollection();
     }
 
     public function getId(): int
@@ -86,77 +82,15 @@ class Account
 
     public function removeProduct(Product $product): static
     {
-        if ($this->product->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getAccount() === $this) {
-                $product->setAccount(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->product->removeElement($product) && $product->getAccount() === $this) {
+            $product->setAccount(null);
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, ProductOrder>
-     */
-    public function getCustomerOrders(): Collection
-    {
-        return $this->customerOrders;
-    }
-
-    public function addOrder(ProductOrder $order): static
-    {
-        if (!$this->customerOrders->contains($order)) {
-            $this->customerOrders->add($order);
-            $order->setCustomer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(ProductOrder $order): static
-    {
-        if ($this->customerOrders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getCustomer() === $this) {
-                $order->setCustomer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ProductOrder>
-     */
-    public function getSellerOrders(): Collection
-    {
-        return $this->sellerOrders;
-    }
-
-    public function addSellerOrder(ProductOrder $sellerOrder): static
-    {
-        if (!$this->sellerOrders->contains($sellerOrder)) {
-            $this->sellerOrders->add($sellerOrder);
-            $sellerOrder->setSeller($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSellerOrder(ProductOrder $sellerOrder): static
-    {
-        if ($this->sellerOrders->removeElement($sellerOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($sellerOrder->getSeller() === $this) {
-                $sellerOrder->setSeller(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getAddress(): ?Address
+    public function getAddress(): Address
     {
         return $this->address;
     }
@@ -188,6 +122,34 @@ class Account
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductOrder>
+     */
+    public function getProductOrders(): Collection
+    {
+        return $this->productOrders;
+    }
+
+    public function addProductOrder(ProductOrder $productOrder): static
+    {
+        if (!$this->productOrders->contains($productOrder)) {
+            $this->productOrders->add($productOrder);
+            $productOrder->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductOrder(ProductOrder $productOrder): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->productOrders->removeElement($productOrder) && $productOrder->getCustomer() === $this) {
+            $productOrder->setCustomer(null);
+        }
 
         return $this;
     }

@@ -21,28 +21,33 @@ class AccountRepository extends ServiceEntityRepository
         parent::__construct($registry, Account::class);
     }
 
-//    /**
-//     * @return Account[] Returns an array of Account objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getMaxId(): int
+    {
+        return $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('max(a.id)')
+            ->from( Account::class, 'a')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
-//    public function findOneBySomeField($value): ?Account
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByIdList(array $idList): array
+    {
+        $queryBuilder = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('a')
+            ->from(Account::class, 'a')
+            ->innerJoin('a.product', 'product')
+            ->addSelect('product')
+            ->leftJoin('a.productOrders', 'productOrders')
+            ->addSelect('productOrders')
+            ->leftJoin('a.address', 'address')
+            ->addSelect('address')
+            ->where('a.id IN (:idList)')
+            ->setParameter('idList', $idList);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

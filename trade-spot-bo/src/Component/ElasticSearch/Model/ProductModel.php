@@ -2,7 +2,8 @@
 
 namespace App\Component\ElasticSearch\Model;
 
-use DateTime;
+use App\Component\Doctrine\Types\EnumProductStatus;
+use DateTimeInterface;
 
 class ProductModel extends AbstractModel
 {
@@ -11,10 +12,15 @@ class ProductModel extends AbstractModel
         protected readonly string $name,
         protected readonly float $price,
         protected readonly string $description,
-        protected readonly string $status,
-        protected readonly CategoryModel $categoryModel,
-        protected readonly DateTime     $createdAt,
-        protected readonly DateTime     $updatedAt,
+        protected readonly EnumProductStatus $status,
+        protected readonly CategoryModel $category,
+        protected readonly DateTimeInterface     $createdAt,
+        protected readonly DateTimeInterface     $updatedAt,
     ) {
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

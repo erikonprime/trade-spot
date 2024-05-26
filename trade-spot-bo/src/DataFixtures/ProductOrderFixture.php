@@ -15,17 +15,14 @@ class ProductOrderFixture  extends Fixture implements DependentFixtureInterface
         $productsOrder = [
             [
                 'customer_id' =>  $this->getReference('account_0'),
-                'seller_id' =>  $this->getReference('account_1'),
                 'product_id' => $this->getReference('product_0'),
             ],
             [
                 'customer_id' =>  $this->getReference('account_2'),
-                'seller_id' =>  $this->getReference('account_0'),
                 'product_id' => $this->getReference('product_1'),
             ],
             [
                 'customer_id' =>  $this->getReference('account_0'),
-                'seller_id' =>  $this->getReference('account_1'),
                 'product_id' => $this->getReference('product_2'),
             ],
         ];
@@ -34,8 +31,7 @@ class ProductOrderFixture  extends Fixture implements DependentFixtureInterface
             $newOrder = new ProductOrder();
             $newOrder
                 ->setProduct($order['product_id'])
-                ->setCustomer($order['customer_id'])
-                ->setSeller($order['customer_id']);
+                ->setCustomer($order['customer_id']);
 
             $manager->persist($newOrder);
 

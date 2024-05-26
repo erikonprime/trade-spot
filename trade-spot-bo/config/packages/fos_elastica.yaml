@@ -7,3 +7,132 @@ fos_elastica:
       password: '%env(ELASTICSEARCH_PASSWORD)%'
   indexes:
     app: null
+    accounts:
+      use_alias: true
+      settings:
+        number_of_shards: '%env(ELASTICSEARCH_NUMBER_OF_SHARDS)%'
+        number_of_replicas: '%env(ELASTICSEARCH_NUMBER_OF_REPLICAS)%'
+        analysis:
+          normalizer:
+            search_normalizer:
+              type: custom
+              char_filter: [ ]
+              filter: [ lowercase ]
+      index_name: '%env(ELASTICSEARCH_ACCOUNTS_INDEX)%'
+      properties:
+        id: { type: keyword }
+        first_name: { type: text }
+        last_name: { type: text }
+        address:
+          type: object
+          properties:
+            zip_code: { type: keyword }
+            city: { type: keyword }
+            country: { type: keyword }
+            street: { type: keyword }
+            phone: { type: keyword }
+        created_at: { type: date, format: 'yyyy-MM-dd HH:mm:ss' }
+        updated_at: { type: date, format: 'yyyy-MM-dd HH:mm:ss' }
+        products:
+          type: object
+          properties:
+            id: { type: keyword }
+            name: { type: text }
+            price: { type: integer }
+            description: { type: text }
+            status: { type: text }
+            category:
+              type: object
+              properties:
+                id: { type: keyword }
+                name: { type: keyword }
+                created_at: { type: date, format: 'yyyy-MM-dd HH:mm:ss' }
+                updated_at: { type: date, format: 'yyyy-MM-dd HH:mm:ss' }
+        product_orders:
+          type: object
+          properties:
+            id: { type: keyword }
+            status: { type: text }
+            customer:
+              type: object
+              properties:
+                id: { type: keyword }
+                first_name: { type: text }
+                last_name: { type: text }
+                address:
+                  type: object
+                  properties:
+                    zip_code: { type: keyword }
+                    city: { type: keyword }
+                    country: { type: keyword }
+                    street: { type: keyword }
+                    phone: { type: keyword }
+            seller:
+              type: object
+              properties:
+                id: { type: keyword }
+                first_name: { type: text }
+                last_name: { type: text }
+                address:
+                  type: object
+                  properties:
+                    zip_code: { type: keyword }
+                    city: { type: keyword }
+                    country: { type: keyword }
+                    street: { type: keyword }
+                    phone: { type: keyword }
+            products:
+              type: object
+              properties:
+                id: { type: keyword }
+                name: { type: text }
+                price: { type: integer }
+                description: { type: text }
+                status: { type: text }
+                category:
+                  type: object
+                  properties:
+                    id: { type: keyword }
+                    name: { type: keyword }
+
+    products:
+      use_alias: true
+      settings:
+        number_of_shards: '%env(ELASTICSEARCH_NUMBER_OF_SHARDS)%'
+        number_of_replicas: '%env(ELASTICSEARCH_NUMBER_OF_REPLICAS)%'
+        analysis:
+          normalizer:
+            search_normalizer:
+              type: custom
+              char_filter: [ ]
+              filter: [ lowercase ]
+      index_name: '%env(ELASTICSEARCH_PRODUCTS_INDEX)%'
+#      properties:
+#        type: object
+#        properties:
+#          id: { type: keyword }
+#          name: { type: text }
+#          price: { type: integer }
+#          description: { type: text }
+#          status: { type: text }
+#          category:
+#            type: object
+#            properties:
+#              id: { type: keyword }
+#              name: { type: keyword }
+#          created_at: { type: date, format: 'yyyy-MM-dd HH:mm:ss' }
+#          updated_at: { type: date, format: 'yyyy-MM-dd HH:mm:ss' }
+#          account:
+#            type: object
+#            properties:
+#              id: { type: keyword }
+#              first_name: { type: text }
+#              last_name: { type: text }
+#              address:
+#                type: object
+#                properties:
+#                  zip_code: { type: keyword }
+#                  city: { type: keyword }
+#                  country: { type: keyword }
+#                  street: { type: keyword }
+#                  phone: { type: keyword }

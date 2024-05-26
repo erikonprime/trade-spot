@@ -10,6 +10,13 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            FOS\ElasticaBundle\Elastica\Index $accountIndex: '@fos_elastica.index.accounts'
+            FOS\ElasticaBundle\Elastica\Index $productIndex: '@fos_elastica.index.products'
+            FOS\ElasticaBundle\Index\MappingBuilder $mappingBuilder: '@fos_elastica.mapping_builder'
+            FOS\ElasticaBundle\Index\AliasProcessor $aliasProcessor: '@fos_elastica.alias_processor'
+            string $accountAlias: '%env(ELASTICSEARCH_ACCOUNTS_INDEX)%'
+            string $productAlias: '%env(ELASTICSEARCH_PRODUCTS_INDEX)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
