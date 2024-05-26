@@ -39,11 +39,11 @@ class AccountRepository extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('a')
             ->from(Account::class, 'a')
-            ->innerJoin('a.product', 'product')
+            ->leftJoin('a.product', 'product')
             ->addSelect('product')
             ->leftJoin('a.productOrders', 'productOrders')
             ->addSelect('productOrders')
-            ->leftJoin('a.address', 'address')
+            ->innerJoin('a.address', 'address')
             ->addSelect('address')
             ->where('a.id IN (:idList)')
             ->setParameter('idList', $idList);
